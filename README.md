@@ -1,1 +1,0 @@
-# automaze-test-backend
