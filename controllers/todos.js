@@ -5,7 +5,25 @@ const { HttpError } = require("../helpers/index.js");
 const { ctrlWrapper } = require("../decorators/index.js");
 
 const getAllToDos = async (req, res) => {
-  const toDos = await ToDo.find({});
+  const { completed, sortOrder, searchQuery } = req.query;
+
+  const query = {};
+
+  if (completed) {
+    query.completed = completed;
+  }
+
+  if (searchQuery) {
+    query.description = { $regex: searchQuery, $options: "i" };
+  }
+
+  const sortOptions = sortOrder
+    ? sortOrder === "desc"
+      ? { priority: -1 }
+      : { priority: 1 }
+    : {};
+
+  const toDos = await ToDo.find(query).sort(sortOptions);
 
   res.json(toDos);
 };
