@@ -97,10 +97,6 @@ const deleteToDo = async (req, res) => {
   });
 };
 
-const getPing = async (_, res) => {
-  res.status(200).json({ message: "Server is alive" });
-};
-
 module.exports = {
   getAllToDos: ctrlWrapper(getAllToDos),
   getToDoById: ctrlWrapper(getToDoById),
@@ -108,5 +104,4 @@ module.exports = {
   updateToDo: ctrlWrapper(updateToDo),
   updateCompletedStatus: ctrlWrapper(updateCompletedStatus),
   deleteToDo: ctrlWrapper(deleteToDo),
-  getPing: ctrlWrapper(getPing),
 };
