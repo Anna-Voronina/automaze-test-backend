@@ -1,18 +1,13 @@
 const { HttpError } = require("../helpers");
 
 const authenticate = async (req, res, next) => {
-  const { authorization = "" } = req.headers;
-  const [bearer, id] = authorization.split(" ");
+  const { userId } = req.body;
 
-  if (bearer !== "Bearer") {
+  if (!userId) {
     next(HttpError(401));
   }
 
-  if (!id) {
-    next(HttpError(401));
-  }
-
-  req.user = { userId: id };
+  req.user = { userId };
   next();
 };
 

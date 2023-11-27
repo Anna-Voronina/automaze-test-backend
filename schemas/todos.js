@@ -14,12 +14,20 @@ const toDoAddSchema = Joi.object({
     "number.min": "priority must be greater than or equal to 1",
     "number.max": "priority must be less than or equal to 10",
   }),
+  userId: Joi.string().required().messages({
+    "any.required": "missing required userId field",
+    "string.base": "userId should be a type of string",
+  }),
 });
 
 const toDoUpdateCompletedSchema = Joi.object({
   completed: Joi.boolean().required().messages({
     "any.required": "missing required completed field",
     "boolean.base": "completed should be a type of boolean",
+  }),
+  userId: Joi.string().required().messages({
+    "any.required": "missing required userId field",
+    "string.base": "userId should be a type of string",
   }),
 });
 
