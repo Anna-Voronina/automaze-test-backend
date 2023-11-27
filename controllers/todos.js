@@ -6,8 +6,9 @@ const { ctrlWrapper } = require("../decorators/index.js");
 
 const getAllToDos = async (req, res) => {
   const { completed, sortOrder, searchQuery } = req.query;
+  const { userId } = req.user;
 
-  const query = {};
+  const query = { userId };
 
   if (completed) {
     query.completed = completed;
@@ -30,7 +31,8 @@ const getAllToDos = async (req, res) => {
 
 const getToDoById = async (req, res) => {
   const { toDoId } = req.params;
-  const foundToDo = await ToDo.findById(toDoId);
+  const { userId } = req.user;
+  const foundToDo = await ToDo.findOne({ _id: toDoId, userId });
 
   if (!foundToDo) {
     throw HttpError(404, "Not found");
@@ -40,17 +42,21 @@ const getToDoById = async (req, res) => {
 };
 
 const addNewToDo = async (req, res) => {
-  console.log(req.body);
+  const { userId } = req.user;
 
-  const addedToDo = await ToDo.create({ ...req.body });
+  const addedToDo = await ToDo.create({ ...req.body, userId });
   res.status(201).json(addedToDo);
 };
 
 const updateToDo = async (req, res) => {
   const { toDoId } = req.params;
-  const updatedToDo = await ToDo.findByIdAndUpdate(toDoId, req.body, {
-    new: true,
-  });
+  const { userId } = req.user;
+
+  const updatedToDo = await ToDo.findOneAndUpdate(
+    { _id: toDoId, userId },
+    req.body,
+    { new: true }
+  );
 
   if (!updatedToDo) {
     throw HttpError(404, "Not found");
@@ -61,9 +67,14 @@ const updateToDo = async (req, res) => {
 
 const updateCompletedStatus = async (req, res) => {
   const { toDoId } = req.params;
-  const updatedToDo = await ToDo.findByIdAndUpdate(toDoId, req.body, {
-    new: true,
-  });
+  const { userId } = req.user;
+  const updatedToDo = await ToDo.findOneAndUpdate(
+    { _id: toDoId, userId },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   if (!updatedToDo) {
     throw HttpError(404, "Not found");
@@ -74,7 +85,8 @@ const updateCompletedStatus = async (req, res) => {
 
 const deleteToDo = async (req, res) => {
   const { toDoId } = req.params;
-  const deletedToDo = await ToDo.findByIdAndDelete(toDoId);
+  const { userId } = req.user;
+  const deletedToDo = await ToDo.findOneAndDelete({ _id: toDoId, userId });
 
   if (!deletedToDo) {
     throw HttpError(404, "Not found");

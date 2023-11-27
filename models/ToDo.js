@@ -16,6 +16,10 @@ const toDoSchema = new Schema(
       type: Number,
       required: [true, "Set priority for your todo"],
     },
+    userId: {
+      type: String,
+      required: [true, "Set userId for your todo"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
