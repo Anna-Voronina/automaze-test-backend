@@ -16,30 +16,23 @@ const updateCompletedFieldValidate = validateBody(
 
 const router = express.Router();
 
-router.get("/", authenticate, ctrl.getAllToDos);
+router.use(authenticate);
 
-router.get("/:toDoId", authenticate, isValidId, ctrl.getToDoById);
+router.get("/", ctrl.getAllToDos);
 
-router.post("/", authenticate, addToDoValidate, ctrl.addNewToDo);
+router.get("/:toDoId", isValidId, ctrl.getToDoById);
 
-router.put(
-  "/:toDoId",
-  authenticate,
-  isValidId,
-  addToDoValidate,
-  ctrl.updateToDo
-);
+router.post("/", addToDoValidate, ctrl.addNewToDo);
+
+router.put("/:toDoId", isValidId, addToDoValidate, ctrl.updateToDo);
 
 router.patch(
   "/:toDoId/completed",
-  authenticate,
   isValidId,
   updateCompletedFieldValidate,
   ctrl.updateCompletedStatus
 );
 
-router.delete("/:toDoId", authenticate, isValidId, ctrl.deleteToDo);
-
-router.get("/ping", ctrl.getPing);
+router.delete("/:toDoId", isValidId, ctrl.deleteToDo);
 
 module.exports = router;
