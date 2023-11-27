@@ -4,7 +4,7 @@ const ctrl = require("../../controllers/todos");
 
 const { validateBody } = require("../../decorators");
 
-const { isValidId } = require("../../middlewares");
+const { authenticate, isValidId } = require("../../middlewares");
 
 const schemas = require("../../schemas/todos");
 
@@ -15,6 +15,8 @@ const updateCompletedFieldValidate = validateBody(
 );
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", ctrl.getAllToDos);
 
